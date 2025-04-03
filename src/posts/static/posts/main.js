@@ -2,10 +2,14 @@ console.log('hello world')
 
 const hellowolrdBox = document.getElementById('hello-world')
 
-hellowolrdBox.innerHTML = "hello <b>world"
-
-s.ajax({
+$.ajax({
     type: 'GET',
-    url: '/hello-world',
-
+    url: '/hello-world/',
+    success: function(response) {
+        console.log('success',response.text)
+        hellowolrdBox.textContent = response.text
+    },
+    error: function(error) {
+        console.log('error', error)
+    }
 })
