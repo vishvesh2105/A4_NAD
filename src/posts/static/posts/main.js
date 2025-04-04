@@ -10,7 +10,7 @@ const title = document.getElementById('id_title')
 const body = document.getElementById('id_body')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
-const url = window.location.href
+const url = window.location.origin + "/";
 
 const alertBox = document.getElementById('alert-box')
 console.log('csrf', csrf[0].value)
