@@ -11,3 +11,10 @@
 .dz:hover {
     background-color: aliceblue !important;
 }
+
+img:before {
+    content: none;
+}
+img:not([src]), img[src=""] {
+    display: none;
+}

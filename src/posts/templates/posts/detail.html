@@ -76,30 +76,9 @@
     {% else %}
         <div class="mt-2 mb-2" No photos to show></div>
     {% endif %}
-    <div id="carouselExample" class="carousel slide">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-            <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-            <img src="..." class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-      </div>
 
 
-    <button id="back-btn" class="btn btn-info">back</button>
+    <a href="{% url 'posts:main-board' %}" id="back-btn" class="btn btn-info">back</a>
     <button id="update-btn" class="btn btn-primary not-visible" data-bs-toggle="modal" data-bs-target="#updateModal">update</button>
     <button id="delete-btn" class="btn btn-danger not-visible" data-bs-toggle="modal" data-bs-target="#deleteModal">delete</button>
     <div id="spinner-box" class="text-center">

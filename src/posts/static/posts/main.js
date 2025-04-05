@@ -1,5 +1,3 @@
-console.log('hello world')
-
 const postsBox = document.getElementById('posts-box')
 const spinnerBox = document.getElementById('spinner-box')
 const loadBtn = document.getElementById('load-btn')
@@ -12,8 +10,10 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 const url = window.location.origin + "/";
 
+const dropzone = document.getElementById('my-dropzone')
 const alertBox = document.getElementById('alert-box')
-console.log('csrf', csrf[0].value)
+const addBtn = document.getElementById('add-btn')
+const closeBtns = [...document.getElementsByClassName('add-modal-close')]
 
 const getCookie =(name) => {
     let cookieValue = null;
@@ -123,6 +123,7 @@ loadBtn.addEventListener('click', ()=>{
 
 })
 
+let newPostId = null
 postForm.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -136,6 +137,7 @@ postForm.addEventListener('submit', e => {
         },
         success: function(response) {
             console.log(response);
+            newPostId = response.id
             postsBox.insertAdjacentHTML('afterbegin', `
                 <div class="card mb-2">
                     <div class="card-body">
@@ -157,9 +159,9 @@ postForm.addEventListener('submit', e => {
                 </div>
             `)
             likeUnlikePosts()
-            $('#addPostModal').modal('hide')
+            //$('#addPostModal').modal('hide')
             handleAlerts('success', 'New Post added!')
-            postForm.reset()
+            // postForm.reset()
         },
         error: function(error) {
             console.log(error);
@@ -168,6 +170,33 @@ postForm.addEventListener('submit', e => {
     });
 });
 
+addBtn.addEventListener('click', ()=> {
+    dropzone.classList.remove('not-visible')
+})
+
+closeBtns.forEach(btn=> btn.addEventListener('click', ()=>{
+    postForm.reset()
+    if(!dropzone.classList.contains('not-visible')){
+        dropzone.classList.add('not-visible')
+    }
+    const myDropzone = Dropzone.forElements("#my-dropzone")
+    myDropzone.removeAllFiles(true)
+}))
+
+Dropzone.autoDiscover = false
+const myDropzone = new Dropzone('#my-dropzone', {
+    url: 'upload/',
+    init: function(){
+        this.on('sending', function(file, xhr, formData){
+            formData.append('csrfmiddlewaretoken', csrftoken)
+            formData.append('new_post_id', newPostId)
+        })
+    },
+    maxFiles: 3,
+    maxFilesize: 4,
+    acceptedFiles: '.jpeg, .jpg, .png'
+
+})
 
 
 getData()
