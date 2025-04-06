@@ -47,12 +47,19 @@ def post_detail(request, pk):
 
 def load_post_data_view(request, num_posts):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        sort_method = request.GET.get('sort')
         visible = 3
         upper = num_posts
         lower = upper - visible
         size = Post.objects.all().count()
 
-        qs = Post.objects.all()
+        if sort_method == 'alphabetical':
+            qs = Post.objects.all().order_by('title')
+        elif sort_method == 'oldest':
+            qs = Post.objects.all().order_by('id')
+        else:  # newest
+            qs = Post.objects.all().order_by('-id')
+
         data =[]
         for obj in qs:
             item ={

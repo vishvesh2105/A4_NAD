@@ -18,3 +18,23 @@ img:before {
 img:not([src]), img[src=""] {
     display: none;
 }
+
+.card {
+    box-shadow: 0 2px 4px rgb(87, 168, 196);
+    border-radius: 0.5rem;
+  }
+  
+  /* Uniform padding for buttons */
+  .card .btn {
+    min-width: 90px;
+  }
+  
+  /* Alert Box (if used) */
+  #alert-box {
+    margin-top: 1rem;
+  }
+  
+  /* Spacing fix */
+  #sort-select {
+    min-width: 140px;
+  }

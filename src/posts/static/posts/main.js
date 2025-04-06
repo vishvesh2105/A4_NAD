@@ -13,6 +13,8 @@ const url = window.location.origin + "/";
 const dropzone = document.getElementById('my-dropzone')
 const alertBox = document.getElementById('alert-box')
 const addBtn = document.getElementById('add-btn')
+const sortSelect = document.getElementById('sort-select');
+let sortMethod = 'newest';
 const closeBtns = [...document.getElementsByClassName('add-modal-close')]
 
 const getCookie =(name) => {
@@ -66,18 +68,22 @@ const likeUnlikePosts = () => {
 let visible = 3
 
 const getData = () => {
-$.ajax({
-    type: 'GET',
-    url: `/data/${visible}`,
-    success: function(response){
-        console.log(response)
-        const data = response.data
-        setTimeout(()=>{
-            spinnerBox.classList.add('not-visible')
-            console.log(data)
+    $.ajax({
+        type: 'GET',
+        url: `/data/${visible}?sort=${sortMethod}`,
+        success: function(response) {
+            const data = response.data;
+
+            spinnerBox.classList.add('not-visible');
+
+            // Clear the posts box ONLY if this is a reset sort
+            if (visible === 3) {
+                postsBox.innerHTML = '';
+            }
+
             data.forEach(el => {
                 postsBox.innerHTML += `
-                    <div class="card mb-2">
+                    <div class="card mb-3 shadow-sm rounded">
                         <div class="card-body">
                             <h5 class="card-title">${el.title}</h5>
                             <p class="card-text">${el.body}</p>
@@ -85,36 +91,39 @@ $.ajax({
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-2">
-                                    <a href="${url}${el.id}" class="btn btn-primary">Details</a>
+                                    <a href="${url}${el.id}" class="btn btn-outline-primary w-100">Details</a>
                                 </div>
                                 <div class="col-2">
                                     <form class="like-unlike-forms" data-form-id="${el.id}">
-                                        <button href="#" class="btn btn-primary" id="like-unlike-${el.id}">${el.liked ? `Unlike (${el.count})`: `Like (${el.count})`}</button>
+                                        <button type="submit" class="btn btn-outline-danger w-100" id="like-unlike-${el.id}">
+                                            ${el.liked ? `Unlike (${el.count})` : `Like (${el.count})`}
+                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                `
+                `;
             });
-            likeUnlikePosts()
-        }, 100)
-        console.log(response.size)
-        if (response.size == 0){
-            endBox.textContent = 'No posts added yet...'
-        }
-        else if (response.size <= visible){
-            loadBtn.classList.add('not-visible')
-            endBox.textContent = 'No more posts to load..... '
-        }
 
-     },
-    
-    error:function(error){
-        console.log(error)
-    }
-})
-}
+            likeUnlikePosts();
+
+            if (response.size === 0) {
+                endBox.textContent = 'No posts added yet...';
+            } else if (response.size <= visible) {
+                loadBtn.classList.add('not-visible');
+                endBox.textContent = 'No more posts to load.....';
+            } else {
+                endBox.textContent = '';
+                loadBtn.classList.remove('not-visible');
+            }
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+};
+
 
 loadBtn.addEventListener('click', ()=>{
     spinnerBox.classList.remove('not-visible')
@@ -122,6 +131,15 @@ loadBtn.addEventListener('click', ()=>{
     getData()
 
 })
+
+sortSelect.addEventListener('change', () => {
+    sortMethod = sortSelect.value;
+    visible = 3;
+    postsBox.innerHTML = '';
+    endBox.textContent = '';
+    loadBtn.classList.remove('not-visible');
+    getData();
+});
 
 let newPostId = null
 postForm.addEventListener('submit', e => {

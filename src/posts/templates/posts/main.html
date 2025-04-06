@@ -39,10 +39,21 @@ posts
         </div>
     </div>
 
-    <div id="alert-box"></div>
-    <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#addPostModal">
-        Add Post
+    
+    <div class="d-flex justify-content-end align-items-center mb-3 gap-2">
+        <label for="sort-select" class="form-label mb-0">Sort posts by:</label>
+        <select id="sort-select" class="form-select form-select-sm w-auto">
+          <option value="newest" selected>Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="alphabetical">Alphabetical</option>
+        </select>
+      </div>
+      <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addPostModal">
+        + Add Post
       </button>
+    <div id="posts-box"></div>
+    <div id="alert-box"></div>
+
     <div id="posts-box"></div>
     <div id="spinner-box"class="text-center">
         <div class="spinner-border" role="status"></div>
